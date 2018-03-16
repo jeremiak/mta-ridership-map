@@ -1,4 +1,6 @@
-# mta station data
+# mta ridership map
+
+a map of nyc mta yearly ridership data
 
 ## data
 

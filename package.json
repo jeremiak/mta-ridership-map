@@ -1,14 +1,14 @@
 {
   "name": "mta-station-history",
   "version": "1.0.0",
-  "description": "## data Originally downloaded from [http://web.mta.info/developers/data/nyct/subway/Stations.csv](http://web.mta.info/developers/data/nyct/subway/Stations.csv) with some columns added",
+  "description": "Map of NYC MTA ridership data",
   "main": "index.js",
   "scripts": {
     "start": "live-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "jeremiak",
   "license": "CC-BY-SA",
   "dependencies": {
     "axios": "^0.18.0",
