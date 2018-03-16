@@ -1,0 +1,21 @@
+{
+  "name": "mta-station-history",
+  "version": "1.0.0",
+  "description": "## data Originally downloaded from [http://web.mta.info/developers/data/nyct/subway/Stations.csv](http://web.mta.info/developers/data/nyct/subway/Stations.csv) with some columns added",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "CC-BY-SA",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "d3": "^4.13.0",
+    "fast-csv": "^2.4.1",
+    "json2csv": "^4.0.2",
+    "live-server": "^1.2.0"
+  }
+}

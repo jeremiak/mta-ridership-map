@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>MTA ridership by year</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: monospace;
+      }
+      body {
+        margin: 0 auto;
+        width: 50%;
+      }
+      #map {
+        margin-top: 1rem;
+      }
+      svg {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>MTA ridership by year</h1>
+      <label><input type="radio" name="year" value="2011" checked>2011</label>
+      <label><input type="radio" name="year" value="2012">2012</label>
+      <label><input type="radio" name="year" value="2013">2013</label>
+      <label><input type="radio" name="year" value="2014">2014</label>
+      <label><input type="radio" name="year" value="2015">2015</label>
+      <label><input type="radio" name="year" value="2016">2016</label>
+      <div id="map"></div>
+      <div>
+        <h2>Data sources</h2>
+        <ul>
+          <li><a href="http://web.mta.info/developers/data/nyct/subway/Stations.csv">Station data from the MTA</a></li>
+          <li><a href="http://web.mta.info/nyct/facts/ridership/ridership_sub_annual.htm">Ridership data from the MTA</a>)</li>
+          <li>NYC geometries are from <a href="http://bl.ocks.org/phil-pedruco/6646844">this block by @phil-pedruco</a></li>
+        </ul>
+      </div>
+    </main>
+
+    <script src="https://unpkg.com/d3"></script>
+    <script src=""></script>
+    <script>
+
+      d3.json('data/nyc.json', (err, nyc) => {
+        d3.csv('data/joined.csv', joined => {
+          const height = 600
+          const width = document.body.offsetWidth
+
+          const projection = d3.geoMercator()
+            .center([-73.94, 40.70])
+            .scale(60000)
+            .translate([ (width) / 2, (height)/2 ])
+          const path = d3.geoPath().projection(projection)
+
+          const svg = d3.select('#map')
+            .append('svg')
+            .attr('height', height)
+            .attr('width', width)
+
+          svg.append('g').selectAll('path')
+            .data(nyc.features)
+              .enter()
+              .append('path')
+                .attr('d', path)
+                .attr('fill', 'pink')
+
+          const draw = (data, year) => {
+            const circles = svg.selectAll('circle').data(data)
+            const scale = d3.scaleLinear()
+              .domain(d3.extent(data.map(d => d[year])))
+              .range([0, 3])
+
+            circles.attr('r', d => scale(d[year]))
+
+            circles.enter()
+              .append('circle')
+                .attr('fill', 'none')
+                .attr('stroke', 'black')
+                .attr('r', d => scale(d[year]))
+                .attr('transform', d => (
+                  `translate(${ projection([ d.long, d.lat ]) })`
+                ))
+
+            circles.exit()
+              .remove()
+          }
+
+          draw(joined, 2011)
+
+          document.querySelectorAll('[name="year"]').forEach(el => {
+            el.addEventListener('change', evt => {
+              const year = evt.target.value
+              draw(joined, year)
+            })
+          })
+        })
+      })
+    </script>
+  </body>
+</html>
